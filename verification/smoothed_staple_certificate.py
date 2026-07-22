@@ -122,4 +122,4 @@ for k in range(m):
           f"cross>0 {cross_pq.is_positive}  D>0 {D.is_positive}")
 
 print("ALL CERTIFICATES PASS" if ok_all else "FAILURE")
-print("certified: l(T_gnomon) <=", sp.N(L, 30), "< 1.2849615334 (previous)")
+print("certified: l(T_gnomon) < 1.2827871 < 1.2849615334  (exact rational chain; decimals above are display only)")
