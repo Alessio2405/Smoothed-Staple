@@ -1,0 +1,259 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,graphicx,hyperref,longtable}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title[The smoothed staple]{The smoothed staple: shorter certified escape
+paths for Bellman's lost-in-a-forest problem in isosceles triangles}
+\author{Alessio Doria}
+\date{July 2026 --- working draft}
+
+\thanks{\textbf{Status.} This is an informal working draft, circulated for
+verification only. It is not submitted, and not intended for submission in
+its present form. Its purpose is to state precisely what the accompanying
+machine-checkable certificates verify, and on what imported result they
+depend, so that the argument can be checked by others. The reasoning behind
+the certificates --- in particular the variant of the verification scheme
+described in Section~2 --- has not been widely reviewed.
+Comments and corrections are very welcome.}
+
+\begin{document}
+\begin{abstract}
+For the isosceles triangle $T$ with unit legs and base angle $\beta$,
+Temerev (2026) proved the certified upper bound
+$\ell(T)\le 1.2849615334\ldots$ at the golden gnomon
+($\beta=36^\circ$) via a three-segment ``staple'' path, together with an
+interval theorem for $\beta\in[31.08^\circ,42.16^\circ]$. We show that, at the
+golden gnomon, the three-segment staple is not optimal among
+convex-position polygonal paths satisfying the same escape criterion. Using the same exact reduction
+(escape of a path follows from a single polygon-contains-disk inclusion for
+a weighted Minkowski sum $W$ of rotated copies of the path's convex hull),
+we exhibit an explicit $20$-vertex path with rational coordinates proving
+\[
+  \ell(T)\;\le\;1.2826879686\ldots\;<\;1.2849615334\ldots
+\]
+at the golden gnomon, with every accepted sign determination carried out in
+exact arithmetic over $\mathbb{Q}(\sqrt5,\sqrt{10-2\sqrt5})$. Numerical
+optimization suggests that the underlying continuum object is a symmetric
+\emph{smoothed staple} whose shoulders are circular arcs, and a bang-bang
+argument for the
+associated infinite-dimensional linear program in support functions leads us
+to conjecture that their curvature radius is exactly $\sin\beta$.
+Conservative per-angle computations indicate the family beats the scaled
+Zalgaller caliper down to $\beta\approx30.76^\circ$ (staple:
+$31.05^\circ$). Optimality is not claimed.
+\end{abstract}
+\maketitle
+
+\section{Introduction}
+Bellman's lost-in-a-forest problem asks for the shortest path guaranteed to
+reach the boundary of a convex region of known shape from an unknown
+starting point and heading \cite{FW04}. For isosceles triangles with base
+angles below $45^\circ$ the problem is open; Ward \cite{Ward08} compared the
+classical candidates numerically, and Temerev \cite{Tem26} proved the first
+certified improvement on an interval of base angles via a piecewise-linear
+three-segment family of \emph{staples}, including the bound
+$\ell(T)\le 1.2849615334\ldots$ at the golden gnomon
+($\beta=36^\circ$, unit legs).
+
+This note improves those bounds. The key observation is structural: the
+escape criterion used in \cite{Tem26} depends only on the convex hull of the
+path, so the staple is a single point in the much larger space of paths with
+convex-position vertices. Optimizing freely in that space, under the
+\emph{same exact criterion}, produces strictly shorter escaping paths, and
+the limiting shape is not piecewise linear.
+
+\section{Preliminaries: the exact escape reduction}
+Let $T=T(\beta)$ have unit legs, base angle $\beta$, outward edge normals
+$n_0=(0,-1)$, $n_{1,2}=(\pm\sin\beta,\cos\beta)$ with weights (edge lengths)
+$w_0=2\cos\beta$, $w_1=w_2=1$, and let $\rho=2\,\mathrm{Area}(T)=\sin2\beta$.
+For a convex body $H$ put
+\[
+  W(H)\;=\;\sum_{i=0}^{2} w_i\,R_{n_i}H,
+\]
+the Minkowski sum of rotated copies of $H$, where $R_n$ is the rotation
+taking $(1,0)$ to $n$'s frame as in \cite{Tem26}. Since
+$\sum_i w_i R_{n_i}=0$, the construction is translation invariant, and since
+plane rotations commute, the criterion below is rotation invariant.
+
+\begin{proposition}[imported from \cite{Tem26}, via Lutwak \cite{Lut98}]
+\label{prop:reduction}
+If $\operatorname{disk}(\rho)\subseteq W(H)$, where $H$ is the convex hull
+of a path $P$, then $P$ escapes $T(\beta)$.
+\end{proposition}
+
+All certificates below verify the inclusion of
+Proposition~\ref{prop:reduction} for an explicit polygon, by exhibiting a
+convex, positively oriented cycle of points of $W$ whose edge lines all lie
+at distance $\ge\rho$ from the origin. Because the cycle's vertices belong
+to $W$ and $W$ is convex, the cycle's hull is contained in $W$; hence the
+disk inclusion follows from the finitely many edge conditions
+$\mathrm{cross}(p,q)^2-\rho^2\,|q-p|^2>0$, each an exact sign determination
+in $\mathbb{Q}(\sqrt5,\sqrt{10-2\sqrt5})$ at $\beta=36^\circ$.
+
+\section{Main theorem}
+\begin{theorem}\label{thm:main}
+Let $T$ be the golden gnomon (apex $108^\circ$, base angles $36^\circ$,
+unit legs). The $20$-vertex polygonal path with the rational vertices of
+Appendix~\ref{tab:verts} (traversed in order) escapes $T$, and consequently
+\[
+  \ell(T)\;\le\;1.2826879686\ldots\;<\;1.2849615334\ldots
+\]
+\end{theorem}
+
+\begin{proof}[Proof (machine-checked)]
+The escape inclusion is verified by
+\texttt{verification/verify\_certificate20.py} in the accompanying
+repository: the proposed $57$-vertex cycle of Minkowski points satisfies,
+for every edge, positive convexity cross product, positive orientation
+cross product, and $D=\mathrm{cross}^2-\rho^2|e|^2>0$, all by exact
+symbolic sign determinations (\texttt{sympy}); the minimum edge distance is
+$0.95105745\ldots>\rho=\sin72^\circ=0.95105651\ldots$. The path length, a
+sum of $19$ square roots of rationals, is bounded above by exact rational
+majorants of each square root (integer arithmetic), and the resulting
+rational is compared exactly against $12826879687/10^{10}$. The certificate
+cycle is stored explicitly with the data; floating point appears in no
+accepted check.
+\end{proof}
+
+\begin{remark}
+A shorter, fully self-contained $8$-vertex certificate proving
+$\ell(T)\le1.2827871$ is included for independent auditing
+(\texttt{smoothed\_staple\_certificate.py}).
+\end{remark}
+
+\section{The continuum object and the $\sin\beta$ curvature law}
+Free polyline optimization under the exact criterion yields the strictly
+decreasing values $1.2849609$ ($n=4$, the staple), $1.2829755$ ($n=6$),
+$1.2827742$ ($n=8$), $1.2827491$ ($n=10$). A piecewise line/arc model with
+free radii, solved by constraint generation on the support-function form of
+the inclusion, converges (dense margin $-6\cdot10^{-15}$) to the symmetric
+path
+\[
+  \underbrace{0.291027}_{\text{straight}}
+  \;\to\;\underbrace{r=0.587785,\ \varphi=9.5232^\circ}_{\text{arc}}
+  \;\to\;\underbrace{0.071683}_{\text{straight}}
+  \;\to\;\underbrace{76.3054^\circ}_{\text{corner}}
+  \;\to\;\underbrace{0.361665}_{\text{base}}\;\to\;(\text{mirror}),
+\]
+of total length $L_\infty=1.2826726243$. The arc radius agrees with
+$\sin36^\circ=0.5877853$ to the optimizer's precision, with the radius left
+free; a second arc allowed on each shoulder degenerates.
+
+\emph{Relation to prior work.} The line--arc geometry is closely related to
+Gibbs's ``Tunnel'' solutions, proposed on Monte Carlo evidence for base
+angles roughly $30.8^\circ$--$38.1^\circ$ \cite{Gib16a} --- a range
+containing $36^\circ$ --- and coupled curvature conditions for extremal
+escape paths appear in his analysis for convex polygons \cite{Gib16b}.
+Those proposals were not accompanied by certified bounds. The contribution
+of the present note is therefore \emph{not} the qualitative smoothed
+geometry, which should be credited to Gibbs, but the exact rational
+polygonal certificate showing that a smoothed/Tunnel-type path rigorously
+improves the previously certified staple bound at the golden gnomon, and
+the specific quantitative prediction $r=\sin\beta$ below.
+
+The value $\sin\beta$ is predicted by the following argument. The
+constraint of Proposition~\ref{prop:reduction} reads
+$h_W(u)=\sum_i w_i\,h_H(R_{n_i}^{T}u)\ge\rho$ for all directions $u$ and is
+\emph{linear} in the support function $h_H$; path length is likewise a
+linear functional of $h_H$ over the traversed normal window. The problem is
+therefore an infinite-dimensional linear program. On a window where the
+constraint is active, $h_W\equiv\rho$ gives $h_W+h_W''=\rho$, i.e.
+\[
+  \sum_i w_i\,\bigl(h_H+h_H''\bigr)(\theta-\alpha_i)\;=\;\rho ,
+\]
+so the curvature radii of $\partial H$ at the three rotated angles combine,
+with weights $w_i$, to the constant $\rho$. A bang-bang optimum concentrates
+all curvature on the copy with the largest weight $w_0=2\cos\beta$, giving
+curvature radius
+\[
+  \frac{\rho}{2\cos\beta}\;=\;\frac{\sin2\beta}{2\cos\beta}\;=\;\sin\beta .
+\]
+
+\begin{conjecture}\label{conj:curvature}
+For $\beta$ in the staple regime, the optimal escape path of $T(\beta)$ is a
+concatenation of line segments, corners, and circular arcs of curvature
+radius exactly $\sin\beta$, symmetric about the axis of $T$; at
+$\beta=36^\circ$ its length is $1.2826726\ldots$
+\end{conjecture}
+
+\section{Per-angle behaviour and the caliper crossing}
+Conservative per-angle values (grid-optimized $8$-vertex polylines followed
+by a conservative scaling correction evaluated in floating point against
+the hull-edge criterion; unlike the certificates of Section~3 these
+corrections are numerical, not symbolic) give a uniform gain of $\approx+0.0026$ over
+the per-angle optimal staple for $\beta\in[30^\circ,33^\circ]$, moving the
+crossing with the scaled Zalgaller caliper from $\beta\approx31.05^\circ$
+(staple) to
+\[
+  \beta\;\approx\;30.76^\circ\qquad(\text{conservative; the continuum
+  crossing is lower still}).
+\]
+The family also beats the low-regime square path at every sampled angle down
+to $29^\circ$; square comparisons are made only below Ward's regime switch
+$\beta_0\approx39.13^\circ$. Near the upper end the smoothing gain genuinely collapses
+($+1.6\cdot10^{-4}$ at $42.0^\circ$, $+10^{-5}$ at $42.5^\circ$; $n=10$
+polylines with exact-margin correction, the same recipe that captures
+$\approx90\%$ of the $2.3\cdot10^{-3}$ gain at $36^\circ$): the arcs
+switch off as $\beta$ approaches the zee crossing, which therefore stays at
+$\beta\approx42.284^\circ$, essentially the staple's $42.28^\circ$ and
+short of the conjectured $42.3^\circ$.
+
+\section{Open problems}
+(i) An interval theorem for the smoothed family in $u=\tan(\beta/2)$,
+replacing arcs by circumscribed tangent polygons and reusing the Sturm
+certificate machinery of \cite{Tem26}; (ii) the exact KKT system at the
+gnomon with $r=\sin\beta$ imposed (five unknowns), which may yield a closed
+form for $1.2826726\ldots$; (iii) a proof of
+Conjecture~\ref{conj:curvature}; (iv) matching lower bounds.
+
+\appendix
+\section{Certificate vertices}\label{tab:verts}
+The $20$ vertices (path order) of the Theorem~\ref{thm:main} witness;
+denominators $10^8$ or divisors thereof.
+\begin{longtable}{lll}
+\hline
+vertex & $x$ & $y$\\
+\hline
+$v_{0}$ & $-1256697/12500000$ & $9697297/25000000$ \\
+$v_{1}$ & $-18524027/100000000$ & $11076737/100000000$ \\
+$v_{2}$ & $-18800781/100000000$ & $10171311/100000000$ \\
+$v_{3}$ & $-600917/3125000$ & $4309011/50000000$ \\
+$v_{4}$ & $-4903679/25000000$ & $1763883/25000000$ \\
+$v_{5}$ & $-99787/500000$ & $5482169/100000000$ \\
+$v_{6}$ & $-20257379/100000000$ & $155879/4000000$ \\
+$v_{7}$ & $-20513533/100000000$ & $2305271/100000000$ \\
+$v_{8}$ & $-10785997/50000000$ & $-5656137/100000000$ \\
+$v_{9}$ & $-5394019/25000000$ & $-568721/10000000$ \\
+$v_{10}$ & $12159143/100000000$ & $-9379621/50000000$ \\
+$v_{11}$ & $193587/1562500$ & $-18428471/100000000$ \\
+$v_{12}$ & $8348493/50000000$ & $-12229211/100000000$ \\
+$v_{13}$ & $17464737/100000000$ & $-11066231/100000000$ \\
+$v_{14}$ & $9100817/50000000$ & $-4945211/50000000$ \\
+$v_{15}$ & $9453909/50000000$ & $-8702301/100000000$ \\
+$v_{16}$ & $19584521/100000000$ & $-3750221/50000000$ \\
+$v_{17}$ & $5057973/25000000$ & $-6284817/100000000$ \\
+$v_{18}$ & $20847673/100000000$ & $-2530147/50000000$ \\
+$v_{19}$ & $33614857/100000000$ & $10934787/50000000$ \\
+\hline
+\end{longtable}
+
+\begin{thebibliography}{9}
+\bibitem{FW04} S.~R. Finch, J.~E. Wetzel, \emph{Lost in a forest}, Amer.
+Math. Monthly 111 (2004), 645--654.
+\bibitem{Gib16a} P.~E. Gibbs, \emph{Lost in an Isosceles Triangle},
+working paper (July 2016).
+\bibitem{Gib16b} P.~E. Gibbs, \emph{Bellman's Escape Problem for Convex
+Polygons}, working paper (June 2016).
+\bibitem{Lut98} E.~Lutwak, \emph{Containment and circumscribing simplices},
+Discrete Comput. Geom. 19 (1998), 229--235.
+\bibitem{Tem26} A.~Temerev, \emph{An improved upper bound for Bellman's
+lost-in-a-forest problem in isosceles triangles} (2026),
+\url{https://github.com/atemerev/bellman-staple}.
+\bibitem{Ward08} J.~W. Ward, \emph{Exploring the Bellman forest problem},
+manuscript (2008).
+\end{thebibliography}
+\end{document}

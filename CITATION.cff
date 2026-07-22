@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+title: "The smoothed staple: improved certified escape paths for Bellman's lost-in-a-forest problem in isosceles triangles"
+authors:
+  - family-names: Doria
+    given-names: Alessio
+message: "If you use this software or the certificates, please cite this repository."
+type: software
+date-released: 2026-07-21
+license: MIT
+keywords: [Bellman lost-in-a-forest, escape paths, computational geometry, certified computation]
+references:
+  - type: software
+    title: bellman-staple
+    authors: [{family-names: Temerev, given-names: Alexander}]
+    url: https://github.com/atemerev/bellman-staple
