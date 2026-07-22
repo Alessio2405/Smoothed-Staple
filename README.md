@@ -191,6 +191,4 @@ python3 verify_certificate20.py          # ~15 min; expected: ALL CERTIFICATES P
 ## Author and license
 
 Alessio Doria. Code and data are released under the MIT license (see
-LICENSE); the manuscript in `paper/` is © the author. No `bellman-staple`
-code is included here; two discovery scripts import it as an external
-runtime dependency. Developed with AI assistance (Claude, Anthropic).
+LICENSE); the manuscript in `paper/` is © the author. No source file from bellman-staple is included verbatim. Some verification and discovery code follows or adapts its mathematical and implementation structure; attribution and the original MIT notice are provided in THIRD_PARTY_NOTICES.md. Developed with AI assistance (Claude, Anthropic).
